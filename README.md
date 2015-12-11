@@ -25,7 +25,7 @@ Will create the following script and run it for you:
 
 ## bsub_run 
 
-Do you ever get tired of having to create your LSF/open-lave scripts by hand, even though most everything in them is the same, except for that one-line command?
+Do you ever get tired of having to create your LSF/open-lava scripts by hand, even though most everything in them is the same, except for that one-line command?
 
 This script takes a job name and your command in quotes and then creates the script for you (and runs it for you).
 
