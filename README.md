@@ -1,5 +1,5 @@
 # Perl6-misc
-Some of my miscellaneous Perl 6 scripts
+Some of my miscellaneous Perl 6 scripts »ö« 
 
 ## sbatch_run 
 
