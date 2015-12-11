@@ -34,9 +34,9 @@ This script takes a job name and your command in quotes and then creates the scr
 Will create the following script and run it for you:
 
     #!/bin/env bash
-    #BSUB -J 1449867486.bsub
-    #BSUB -o 1449867486.bsub.o_%J
-    #BSUB -e 1449867486.bsub.e_%J
+    #BSUB -J list_files.bsub
+    #BSUB -o list_files.bsub.o_%J
+    #BSUB -e list_files.bsub.e_%J
     #BSUB -R "rusage[mem=5000] span[hosts=1]"
     #BSUB -n 1
     ls -lArt > list_of_files.txt
