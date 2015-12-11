@@ -29,7 +29,7 @@ Do you ever get tired of having to create your LSF/open-lava scripts by hand, ev
 
 This script takes a job name and your command in quotes and then creates the script for you (and runs it for you).
 
-    bsub_run --job=list_files 'ls'
+    bsub_run --job=list_files 'ls -lArt > list_of_files.txt'
 
 Will create the following script and run it for you:
 
@@ -39,4 +39,4 @@ Will create the following script and run it for you:
     #BSUB -e 1449867486.bsub.e_%J
     #BSUB -R "rusage[mem=5000] span[hosts=1]"
     #BSUB -n 1
-    ls
+    ls -lArt > list_of_files.txt
