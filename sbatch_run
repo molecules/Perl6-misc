@@ -1,0 +1,114 @@
+#!/bin/env perl6
+
+# Default for memory is 5GB of RAM
+# Default maximum run time is two day (i.e. 48 hours)
+
+constant $DEFAULT_TIME        = '2-0'; # 2 days
+constant $DEFAULT_MEM         = '5G';  # WARNING this will need to be higher for many jobs
+constant $DEFAULT_JOBNAME     = time;
+constant $DEFAULT_PARTITION   = 'c14,general,HighMem';
+constant $DEFAULT_CPUs        = 1;
+
+# job and wrap as positional parameters
+multi MAIN (
+    $job,
+    $wrap,
+
+    :$cpu=$DEFAULT_CPUs,
+Str :$mem=$DEFAULT_MEM,
+    :$time=$DEFAULT_TIME,
+    :$partition=$DEFAULT_PARTITION,
+    :$run=True,
+)
+{
+    MAIN( :$wrap, :$cpu, :$mem, :$job, :$time, :$partition, :$run);
+}
+
+# wrap as a positional parameter
+multi MAIN (
+    $wrap,
+    :$cpu=$DEFAULT_CPUs,
+Str :$mem=$DEFAULT_MEM,
+    :$job=$DEFAULT_JOBNAME,
+    :$time=$DEFAULT_TIME,
+    :$partition=$DEFAULT_PARTITION,
+    :$run=True,
+)
+{
+    MAIN( :$wrap, :$cpu, :$mem, :$job, :$time, :$partition, :$run);
+}
+
+# wrap as a named parameter
+multi MAIN (
+    :$wrap,
+    :$cpu=$DEFAULT_CPUs,
+Str :$mem=$DEFAULT_MEM,
+    :$job=$DEFAULT_JOBNAME,
+    :$time=$DEFAULT_TIME,
+    :$partition=$DEFAULT_PARTITION,
+    :$run=True,
+)
+{
+    my $job_script_name = job_script_name_for($job);
+    my $batch_code      = batch_code(:$mem, :$cpu, :$wrap, :job($job_script_name), :$time, :$partition);
+
+    # Write batch file
+    spurt($job_script_name, $batch_code);
+
+    if ( $run )
+    {
+        # Run batch file
+        run("sbatch", $job_script_name);
+    }
+}
+
+# Create the text for a batch script
+sub batch_code ( :$wrap, :$cpu, :$mem, :$job, :$time, :$partition)
+{
+    # Create batch header
+    my $header = batch_header( :$cpu, :$mem, :$job, :$time, :$partition);
+
+    # Add body to code
+    my $code = "$header\n$wrap";
+
+    return $code;
+}
+
+sub batch_header ( :$cpu, :$mem, :$job, :$time, :$partition)
+{
+    return qq:heredoc/END/;
+    #!/bin/env bash
+    #SBATCH -J $job
+    #SBATCH -o $job.o_%j
+    #SBATCH -e $job.e_%j
+    #SBATCH --partition $partition
+    #SBATCH --mem $mem
+    #SBATCH --cpus-per-task $cpu
+    #SBATCH --nodes 1
+    #SBATCH --time $time
+    END
+}
+
+sub replace_nonword_characters ( $name is copy)  # copies can be modified within a subroutine
+{
+    $name ~~ s:g/\W/_/; # Search globally and replace nonword characters with underscore
+    return $name;
+}
+
+# Create script name based on the job name
+# If needed, make the scriptname versioned to avoid overwriting previous batch files
+sub job_script_name_for ( $job )
+{
+    my $job_name    = replace_nonword_characters($job);
+    my $version     = 0;
+    my $script_name = "$job_name.sbatch";
+
+    # Increment the version number until a unique script name is created
+    while ( $script_name.IO ~~ :e)
+    {
+        $version++;
+        $script_name        = "$job_name.sbatch.$version";
+    }
+
+    return $script_name;
+}
