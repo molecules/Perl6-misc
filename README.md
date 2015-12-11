@@ -7,7 +7,7 @@ Do you ever get tired of having to create your SLURM scripts by hand, even thoug
 
 This script takes a job name and your command in quotes and then creates the script for you (and runs it for you).
 
-    sbatch_run jobname 'ls'
+    sbatch_run jobname 'ls -lArt > list_of_files.txt'
 
 Will create the following script and run it for you:
 
@@ -21,7 +21,7 @@ Will create the following script and run it for you:
     #SBATCH --nodes 1
     #SBATCH --time 2-0
 
-    ls
+    ls -lArt > list_of_files.txt
 
 ## bsub_run 
 
