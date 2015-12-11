@@ -3,8 +3,6 @@ Some of my miscellaneous Perl 6 scripts »ö«
 
 ## sbatch_run 
 
-This is the Perl 6 script that I use more than any other.
-
 Do you ever get tired of having to create your SLURM scripts by hand, even though most everything in them is the same, except for that one-line command?
 
 This script takes a job name and your command in quotes and then creates the script for you (and runs it for you).
