@@ -9,41 +9,13 @@ constant $DEFAULT_JOBNAME     = time;
 constant $DEFAULT_PARTITION   = 'c14,general,HighMem';
 constant $DEFAULT_CPUs        = 1;
 
-# job and wrap as positional parameters
-multi MAIN (
+# job and wrap as positional parameters, the rest as named parameters
+sub MAIN (
     $job,
     $wrap,
 
     :$cpu=$DEFAULT_CPUs,
 Str :$mem=$DEFAULT_MEM,
-    :$time=$DEFAULT_TIME,
-    :$partition=$DEFAULT_PARTITION,
-    :$run=True,
-)
-{
-    MAIN( :$wrap, :$cpu, :$mem, :$job, :$time, :$partition, :$run);
-}
-
-# wrap as a positional parameter
-multi MAIN (
-    $wrap,
-    :$cpu=$DEFAULT_CPUs,
-Str :$mem=$DEFAULT_MEM,
-    :$job=$DEFAULT_JOBNAME,
-    :$time=$DEFAULT_TIME,
-    :$partition=$DEFAULT_PARTITION,
-    :$run=True,
-)
-{
-    MAIN( :$wrap, :$cpu, :$mem, :$job, :$time, :$partition, :$run);
-}
-
-# wrap as a named parameter
-multi MAIN (
-    :$wrap,
-    :$cpu=$DEFAULT_CPUs,
-Str :$mem=$DEFAULT_MEM,
-    :$job=$DEFAULT_JOBNAME,
     :$time=$DEFAULT_TIME,
     :$partition=$DEFAULT_PARTITION,
     :$run=True,
