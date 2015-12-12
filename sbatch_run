@@ -5,7 +5,6 @@
 
 constant $DEFAULT_TIME        = '2-0'; # 2 days
 constant $DEFAULT_MEM         = '5G';  # WARNING this will need to be higher for many jobs
-constant $DEFAULT_JOBNAME     = time;
 constant $DEFAULT_PARTITION   = 'c14,general,HighMem';
 constant $DEFAULT_CPUs        = 1;
 
